@@ -3,6 +3,7 @@ package com.example.seunghyun.myapplication;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.AsyncTask;
@@ -18,6 +19,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -53,10 +56,12 @@ public class MainActivity extends Activity
                 if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                     str = String.format("%d.jpg", System.currentTimeMillis());
                     File file = new File(Environment.getExternalStorageDirectory()+"/develop",str);
+                    FileOutputStream outputStream =null;
                     try {
-                        FileWriter fileWriter = new FileWriter(file,false);
-                        for(int i=0; i<data.length; i++)
-                            fileWriter.write(data[i]);
+                        outputStream = new FileOutputStream(file);
+                        outputStream.write(data);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -198,6 +203,7 @@ public class MainActivity extends Activity
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             Log.d("ok","ok");
+
         }
     }
 
