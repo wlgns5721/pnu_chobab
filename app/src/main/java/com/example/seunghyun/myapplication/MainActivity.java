@@ -1,14 +1,18 @@
 package com.example.seunghyun.myapplication;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Environment;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +20,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import java.io.File;
@@ -24,9 +29,12 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.xml.transform.Result;
+
 
 public class MainActivity extends Activity
         implements SurfaceHolder.Callback {
+
     @SuppressWarnings("deprecation")
     Camera camera;
     SurfaceView surfaceView;
@@ -53,8 +61,9 @@ public class MainActivity extends Activity
 
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
-                if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                     str = String.format("%d.jpg", System.currentTimeMillis());
+
                     File file = new File(Environment.getExternalStorageDirectory()+"/develop",str);
                     FileOutputStream outputStream =null;
                     try {
@@ -111,7 +120,7 @@ public class MainActivity extends Activity
     @SuppressWarnings("deprecation")
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        if(isPermissionGranted())
+        if (isPermissionGranted())
             startCapture();
     }
 
@@ -130,13 +139,12 @@ public class MainActivity extends Activity
 
     public boolean isPermissionGranted() {
         int cameraPermission = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA);
-        int storagePermission = ContextCompat.checkSelfPermission(getApplicationContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (cameraPermission == PackageManager.PERMISSION_GRANTED && storagePermission==PackageManager.PERMISSION_GRANTED) {
+        int storagePermission = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (cameraPermission == PackageManager.PERMISSION_GRANTED && storagePermission == PackageManager.PERMISSION_GRANTED) {
             return true;
-        } else if(cameraPermission != PackageManager.PERMISSION_GRANTED){
+        } else if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_OK);
-        }
-        else if(storagePermission!=PackageManager.PERMISSION_GRANTED) {
+        } else if (storagePermission != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_OK);
         }
         return false;
@@ -145,22 +153,21 @@ public class MainActivity extends Activity
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch(requestCode) {
+        switch (requestCode) {
             case CAMERA_PERMISSION_OK:
                 boolean cameraAccepted = (grantResults[0] == PackageManager.PERMISSION_GRANTED);
                 if (cameraAccepted) {
                     int permission = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
                     if (permission == PackageManager.PERMISSION_GRANTED) {
                         startCapture();
-                    }
-                    else {
+                    } else {
                         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_OK);
                     }
                 }
                 break;
             case STORAGE_PERMISSION_OK:
                 boolean storageAccepted = (grantResults[0] == PackageManager.PERMISSION_GRANTED);
-                if(storageAccepted) {
+                if (storageAccepted) {
                     startCapture();
                 }
                 break;
@@ -189,7 +196,7 @@ public class MainActivity extends Activity
         @Override
         protected Void doInBackground(Integer... integers) {
             try {
-                for(int i=0; i<5; i++) {
+                for (int i = 0; i < 1; i++) {
                     Thread.sleep(3000);
                     camera.takePicture(null, null, jpegCallback);
                 }
@@ -202,9 +209,12 @@ public class MainActivity extends Activity
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Log.d("ok","ok");
+            Log.d("ok", "ok");
+            Intent intent = new Intent(MainActivity.this, ResultActivity.class);
+            startActivity(intent);
+            finish();
+
 
         }
     }
-
 }
