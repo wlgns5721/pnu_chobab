@@ -18,7 +18,7 @@ public class APIClient {
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
             retrofit = new Retrofit.Builder()
-                    .baseUrl("http://172.20.10.5:5000")
+                    .baseUrl("http://54.244.57.153:80")
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();

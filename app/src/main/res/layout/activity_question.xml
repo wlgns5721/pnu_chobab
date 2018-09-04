@@ -10,20 +10,20 @@
         android:layout_weight="1"
         android:textSize = "30dp"
         android:textColor = "#000000"
-        android:text = "다시 듣기"
+        android:text = "유통기한 인식"
         android:background="#6fdcf2"
         android:layout_margin="5dp"
-        android:id="@+id/btn_listen"/>
+        android:id="@+id/btn_select_expiration"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:textSize = "30dp"
-        android:text = "다시 촬영하기"
+        android:text = "물체 인식"
         android:textColor = "#000000"
         android:background="#6fdcf2"
         android:layout_margin="5dp"
-        android:id="@+id/btn_return" />
+        android:id="@+id/btn_select_recognition" />
 
 
 
