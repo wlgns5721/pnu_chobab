@@ -2,6 +2,7 @@ package com.example.seunghyun.myapplication;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
@@ -48,10 +49,18 @@ public class QuestionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_question);
         btnExpiration = (Button)findViewById(R.id.btn_select_expiration);
         btnRecognition = (Button)findViewById(R.id.btn_select_recognition);
+
+        Typeface fontRecognition = Typeface.createFromAsset(getAssets(), "fonts/BMHANNA_11yrs_ttf.ttf"); // 폰트 설정 후
+        btnRecognition.setTypeface(fontRecognition); //btn2 버튼에 폰트 적용
+
+        Typeface fontExpiration = Typeface.createFromAsset(getAssets(), "fonts/BMHANNA_11yrs_ttf.ttf"); // 폰트 설정 후
+        btnExpiration.setTypeface(fontExpiration); //btn2 버튼에 폰트 적용
+
         mDialog = new SweetAlertDialog(QuestionActivity.this, SweetAlertDialog.PROGRESS_TYPE);
         mDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
         mDialog.setTitleText("준비중입니다...");
         mDialog.setCancelable(true);
+
 
         recogIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         recogIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());

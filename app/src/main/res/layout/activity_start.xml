@@ -5,14 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.seunghyun.myapplication.StartActivity">
-    <Button
+
+
+    <ImageButton
         android:id = "@+id/btn_start_capture"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/top_color"
-        android:text = "촬영하기"
-        android:textColor = "#000000"
-        android:textSize = "40dp"
-        android:textStyle="bold"
-        android:layout_margin="5dp"/>
+        android:scaleType="center"
+        android:padding="0dp"
+        android:src="@drawable/buttonimage"
+        />
 </LinearLayout>

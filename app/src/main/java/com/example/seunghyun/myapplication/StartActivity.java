@@ -10,10 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class StartActivity extends AppCompatActivity {
-    private Button btnStartCapture;
+    private ImageButton btnStartCapture;
     private final static int PERMISSION_OK = 100;
     private final static int STORAGE_PERMISSION_OK = 101;
     private final static int AUDIO_PERMISSION_OK = 102;
@@ -25,7 +26,7 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        btnStartCapture = (Button) findViewById(R.id.btn_start_capture);
+        btnStartCapture = (ImageButton) findViewById(R.id.btn_start_capture);
         btnStartCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
