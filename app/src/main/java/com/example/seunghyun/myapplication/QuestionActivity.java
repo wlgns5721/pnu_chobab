@@ -51,10 +51,10 @@ public class QuestionActivity extends AppCompatActivity {
         btnRecognition = (Button)findViewById(R.id.btn_select_recognition);
 
         Typeface fontRecognition = Typeface.createFromAsset(getAssets(), "fonts/BMHANNA_11yrs_ttf.ttf"); // 폰트 설정 후
-        btnRecognition.setTypeface(fontRecognition); //btn2 버튼에 폰트 적용
+        btnRecognition.setTypeface(fontRecognition); //btnRecognitnion 버튼에 폰트 적용
 
         Typeface fontExpiration = Typeface.createFromAsset(getAssets(), "fonts/BMHANNA_11yrs_ttf.ttf"); // 폰트 설정 후
-        btnExpiration.setTypeface(fontExpiration); //btn2 버튼에 폰트 적용
+        btnExpiration.setTypeface(fontExpiration); //btnExpiration 버튼에 폰트 적용
 
         mDialog = new SweetAlertDialog(QuestionActivity.this, SweetAlertDialog.PROGRESS_TYPE);
         mDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));

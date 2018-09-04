@@ -1,6 +1,7 @@
 package com.example.seunghyun.myapplication;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
@@ -28,6 +29,12 @@ public class ResultActivity extends AppCompatActivity {
 
         BtnListen = (Button) findViewById(R.id.btn_listen);
         BtnReturn = (Button) findViewById(R.id.btn_return);
+
+        Typeface fontBtnListen = Typeface.createFromAsset(getAssets(), "fonts/BMHANNA_11yrs_ttf.ttf"); // 폰트 설정 후
+        BtnListen.setTypeface(fontBtnListen); //fontBtnListen 버튼에 폰트 적용
+
+        Typeface fontBtnReturn = Typeface.createFromAsset(getAssets(), "fonts/BMHANNA_11yrs_ttf.ttf"); // 폰트 설정 후
+        BtnReturn.setTypeface(fontBtnReturn); //fontBtnReturn 버튼에 폰트 적용
 
         resultMessage = getIntent().getStringExtra("result");
 
