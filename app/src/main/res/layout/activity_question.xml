@@ -11,7 +11,7 @@
         android:textSize = "30dp"
         android:textColor = "#000000"
         android:text = "유통기한 인식"
-        android:background="#6fdcf2"
+        android:background="@color/global_color"
         android:layout_margin="5dp"
         android:id="@+id/btn_select_expiration"/>
     <Button
@@ -21,7 +21,7 @@
         android:textSize = "30dp"
         android:text = "물체 인식"
         android:textColor = "#000000"
-        android:background="#6fdcf2"
+        android:background="@color/global_color"
         android:layout_margin="5dp"
         android:id="@+id/btn_select_recognition" />
 

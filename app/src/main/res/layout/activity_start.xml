@@ -9,7 +9,7 @@
         android:id = "@+id/btn_start_capture"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#70f9f2"
+        android:background="@color/global_color"
         android:text = "촬영하기"
         android:textColor = "#000000"
         android:textSize = "40dp"

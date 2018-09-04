@@ -7,11 +7,11 @@ import android.speech.tts.UtteranceProgressListener;
 import android.view.View;
 import android.widget.Button;
 import android.support.v7.app.AppCompatActivity;
+
 import static android.speech.tts.TextToSpeech.ERROR;
 
 
 import java.util.Locale;
-
 
 
 public class ResultActivity extends AppCompatActivity {
@@ -20,6 +20,7 @@ public class ResultActivity extends AppCompatActivity {
     private Button BtnListen, BtnReturn;
     private final String replayMessage = "다시듣고 싶으면 휴대폰의 윗부분을 누르시고, 촬영을 다시 하고 싶으시면 휴대폰의 아랫부분을 눌러주세요";
     private String resultMessage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,13 +80,13 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     @Override
-        public void onDestroy () {
-            super.onDestroy();
-            // TTS 객체가 남아있다면 실행을 중지하고 메모리에서 제거한다.
-            if (tts != null) {
-                tts.stop();
-                tts.shutdown();
-                tts = null;
-            }
+    public void onDestroy() {
+        super.onDestroy();
+        // TTS 객체가 남아있다면 실행을 중지하고 메모리에서 제거한다.
+        if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+            tts = null;
         }
+    }
 }
