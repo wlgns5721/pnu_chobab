@@ -8,20 +8,22 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:textSize = "30dp"
+        android:textSize = "40dp"
         android:textColor = "#000000"
         android:text = "다시 듣기"
-        android:background="@color/global_color"
+        android:background="@color/top_color"
         android:layout_margin="5dp"
+        android:textStyle="bold"
         android:id="@+id/btn_listen"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:textSize = "30dp"
+        android:textSize = "40dp"
+        android:textStyle="bold"
         android:text = "다시 촬영하기"
         android:textColor = "#000000"
-        android:background="@color/global_color"
+        android:background="@color/bottom_color"
         android:layout_margin="5dp"
         android:id="@+id/btn_return" />
 

@@ -8,20 +8,22 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:textSize = "30dp"
+        android:textSize = "40dp"
+        android:textStyle="bold"
         android:textColor = "#000000"
-        android:text = "유통기한 인식"
-        android:background="@color/global_color"
+        android:text = "유통기한"
+        android:background="@color/top_color"
         android:layout_margin="5dp"
         android:id="@+id/btn_select_expiration"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:textSize = "30dp"
-        android:text = "물체 인식"
+        android:textSize = "40dp"
+        android:textStyle="bold"
+        android:text = "물체"
         android:textColor = "#000000"
-        android:background="@color/global_color"
+        android:background="@color/bottom_color"
         android:layout_margin="5dp"
         android:id="@+id/btn_select_recognition" />
 
