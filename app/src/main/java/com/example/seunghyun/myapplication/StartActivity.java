@@ -10,10 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class StartActivity extends AppCompatActivity {
     private Button btnStartCapture;
-    private final static int CAMERA_PERMISSION_OK = 100;
+    private final static int PERMISSION_OK = 100;
     private final static int STORAGE_PERMISSION_OK = 101;
     private final static int AUDIO_PERMISSION_OK = 102;
     private boolean isCameraGranted = false;
@@ -43,12 +44,11 @@ public class StartActivity extends AppCompatActivity {
         if (cameraPermission == PackageManager.PERMISSION_GRANTED && storagePermission == PackageManager.PERMISSION_GRANTED
                 && audioPermission == PackageManager.PERMISSION_GRANTED) {
             return true;
-        } else if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_OK);
-        } else if (storagePermission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_OK);
-        } else if (audioPermission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, AUDIO_PERMISSION_OK);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.RECORD_AUDIO},
+                    PERMISSION_OK);
         }
         return false;
     }
@@ -57,35 +57,19 @@ public class StartActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case CAMERA_PERMISSION_OK:
+            case PERMISSION_OK:
                 isCameraGranted = (grantResults[0] == PackageManager.PERMISSION_GRANTED);
-                if (isCameraGranted) {
-                    int permission = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                    if (permission == PackageManager.PERMISSION_GRANTED) {
-
-                    } else {
-                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_OK);
-                    }
-                }
-                break;
-            case STORAGE_PERMISSION_OK:
-                isStorageGranted = (grantResults[0] == PackageManager.PERMISSION_GRANTED);
-                if (isStorageGranted) {
-                    int permission = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO);
-                    if (permission == PackageManager.PERMISSION_GRANTED) {
-
-                    } else {
-                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, AUDIO_PERMISSION_OK);
-                    }
-                }
-                break;
-            case AUDIO_PERMISSION_OK:
-                isAudioGranted = (grantResults[0] == PackageManager.PERMISSION_GRANTED);
-                if(isAudioGranted) {
+                isStorageGranted = (grantResults[1] == PackageManager.PERMISSION_GRANTED);
+                isAudioGranted = (grantResults[2] == PackageManager.PERMISSION_GRANTED);
+                if (isCameraGranted && isStorageGranted && isAudioGranted) {
                     Intent intent = new Intent(StartActivity.this,QuestionActivity.class);
                     startActivity(intent);
                 }
+                else {
+                    Toast.makeText(this,"권한을 승인하지 않아 앱을 사용할 수 없습니다.",Toast.LENGTH_LONG).show();
+                }
                 break;
+
         }
     }
 }

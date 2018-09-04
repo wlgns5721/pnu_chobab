@@ -1,6 +1,8 @@
 package com.example.seunghyun.myapplication;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -10,12 +12,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.seunghyun.myapplication.requests.FunctionRequest;
 import com.example.seunghyun.myapplication.responses.SuccessResponse;
 import com.example.seunghyun.myapplication.util.APIClient;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -35,7 +40,7 @@ public class QuestionActivity extends AppCompatActivity {
     private Intent recogIntent;
     private final int OPTION_RECOGNITION = 10;
     private final int OPTION_EXPIRATION = 11;
-
+    private SweetAlertDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,14 @@ public class QuestionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_question);
         btnExpiration = (Button)findViewById(R.id.btn_select_expiration);
         btnRecognition = (Button)findViewById(R.id.btn_select_recognition);
+        mDialog = new SweetAlertDialog(QuestionActivity.this, SweetAlertDialog.PROGRESS_TYPE);
+        mDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        mDialog.setTitleText("준비중입니다...");
+        mDialog.setCancelable(true);
+
+        recogIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        recogIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
+        recogIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
 
         // TTS를 생성하고 OnInitListener로 초기화 한다.
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
@@ -60,10 +73,12 @@ public class QuestionActivity extends AppCompatActivity {
         btnExpiration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDialog.show();
                 APIClient.getInstance().create(FunctionRequest.class).expiration().enqueue(new Callback<SuccessResponse>() {
                     @Override
                     public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
                         if(response.isSuccessful()) {
+                            mDialog.dismiss();
                             Intent intent = new Intent(QuestionActivity.this, CaptureActivity.class);
                             intent.putExtra("option", "expiration");
                             intent.putExtra("id",response.body().getId());
@@ -86,8 +101,9 @@ public class QuestionActivity extends AppCompatActivity {
                 intent.putExtra("option","recognition");
                 if(tts.isSpeaking())
                     tts.stop();
-                tts.speak(recognitionMessage, TextToSpeech.QUEUE_FLUSH, null);
-
+                HashMap<String, String> hashMap = new HashMap<String,String>();
+                hashMap.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,"text");
+                tts.speak(recognitionMessage, TextToSpeech.QUEUE_FLUSH, hashMap);
             }
         });
 
@@ -99,8 +115,7 @@ public class QuestionActivity extends AppCompatActivity {
 
             @Override
             public void onDone(String utteranceId) {
-                mRecognizer.startListening(recogIntent);
-
+                new RecordAsynTask().execute();
             }
 
             @Override
@@ -112,32 +127,26 @@ public class QuestionActivity extends AppCompatActivity {
         listener = new RecognitionListener() {
             @Override
             public void onReadyForSpeech(Bundle params) {
-
             }
 
             @Override
             public void onBeginningOfSpeech() {
-
             }
 
             @Override
             public void onRmsChanged(float rmsdB) {
-
             }
 
             @Override
             public void onBufferReceived(byte[] buffer) {
-
             }
 
             @Override
             public void onEndOfSpeech() {
-
             }
 
             @Override
             public void onError(int error) {
-
             }
 
             @Override
@@ -145,10 +154,12 @@ public class QuestionActivity extends AppCompatActivity {
                 String key = SpeechRecognizer.RESULTS_RECOGNITION;
                 ArrayList<String> result = results.getStringArrayList(key);
                 String sendingWord = selectWord(result);
+                mDialog.show();
                 APIClient.getInstance().create(FunctionRequest.class).recognition(sendingWord).enqueue(new Callback<SuccessResponse>() {
                     @Override
                     public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
                         if(response.isSuccessful()) {
+                            mDialog.dismiss();
                             Intent intent = new Intent(QuestionActivity.this, CaptureActivity.class);
                             intent.putExtra("option", "recognition");
                             intent.putExtra("id",response.body().getId());
@@ -158,7 +169,8 @@ public class QuestionActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<SuccessResponse> call, Throwable t) {
-
+                        Toast.makeText(getApplicationContext(),"인식 실패",Toast.LENGTH_LONG).show();
+                        mDialog.dismiss();
                     }
                 });
             }
@@ -173,13 +185,9 @@ public class QuestionActivity extends AppCompatActivity {
 
             }
         };
-        recogIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        recogIntent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName());
-        recogIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
 
         mRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
         mRecognizer.setRecognitionListener(listener);
-
     }
 
     public String selectWord(ArrayList<String> wordList) {
@@ -191,7 +199,18 @@ public class QuestionActivity extends AppCompatActivity {
         return wordList.get(index);
     }
 
+    class RecordAsynTask extends AsyncTask<Integer, Integer, Void> {
+        @Override
+        protected Void doInBackground(Integer... integers) {
+            return null;
+        }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mRecognizer.startListening(recogIntent);
+        }
+    }
 
 
 
